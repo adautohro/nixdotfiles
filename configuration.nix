@@ -47,8 +47,8 @@
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -97,6 +97,7 @@
     packages = with pkgs; [
     #  thunderbird
     ];
+    shell = pkgs.zsh;
   };
 
   # Programs
@@ -104,6 +105,7 @@
    enable = true;
   };
   programs.firefox.enable = true;
+  programs.zsh.enable = true;
 
   programs.steam = {
     enable = true;

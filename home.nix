@@ -6,16 +6,47 @@
 
   home.stateVersion = "26.05";
 
-  #Packages that should be installed in the user profile
-  home.packages = [
+  fonts.fontconfig.enable = true;
 
+  #Packages that should be installed in the user profile
+  home.packages = with pkgs; [
+     fastfetch
+     nerd-fonts.jetbrains-mono
   ];
   
   #Let home-manager install and manage itself
   programs.home-manager.enable = true;
 
+
   programs.neovim.enable = true;
-  programs.kitty.enable = true;
+  programs.kitty = {
+    enable = true;
+    font = {
+      name = "JetbrainsMono Nerd Font";
+      size = 12;
+    };
+    settings = {
+      background_opacity = "0.85";
+    };
+  };
+
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
+    history.size = 1000;
+
+    initContent = ''
+	fastfetch
+    '';
+  };
+
   programs.git = {
    enable = true;
    settings = {
