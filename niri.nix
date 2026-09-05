@@ -61,8 +61,10 @@ wayland.windowManager.niri = {
 
     binds = {
       "Mod+Space" = { spawn-sh = "noctalia msg panel-toggle launcher"; };
+      "Mod+I" = { spawn-sh = "noctalia msg settings-toggle"; };
+      "Mod+S" = { spawn-sh = "noctalia msg panel-toggle control-center"; };
       "Mod+Return" = { spawn = "kitty"; };
-      "Mod+O" = {
+      "Mod+O" = { 
         _props.repeat = false; 
         toggle-overview = {}; 
       };

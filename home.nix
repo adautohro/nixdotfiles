@@ -23,10 +23,11 @@
     enable = true;
     font = {
       name = "JetbrainsMono Nerd Font";
-      size = 12;
+      size = 11;
     };
     settings = {
       background_opacity = "0.85";
+      background_blur = 32; # 1 to 64
     };
   };
 
@@ -81,7 +82,13 @@
     };
   };
 
-  imports = [ inputs.noctalia.homeModules.default inputs.zen-browser.homeModules.beta ./niri.nix ];
+  imports = [ 
+    inputs.noctalia.homeModules.default
+    inputs.zen-browser.homeModules.beta
+    ./niri.nix 
+    ./noctalia.nix
+  ];
+
   programs.zen-browser = {
     enable = true; 
     setAsDefaultBrowser = true;
@@ -155,42 +162,5 @@
 
 
   };
-
-  programs.noctalia = {
-   enable = true;
-   settings = {
-    theme = {
-      mode = "dark";
-      source = "wallpaper";
-      builtin = "m3-content";
-    };
-    interface = {
-      font.family = "Adwaita Sans";
-      language = "auto";
-    };
-    backdrop = {
-      enabled = true;
-    };
-    calendar = {
-     calendar = true;
-    };
-    location = {
-     adress = "Fortaleza,Brazil";
-    };
-    screen-time.enabled = true;
-    dock = {
-      enabled = true;
-      behaviour = {
-        auto-hide = "smart";
-        show-dots = true;
-        show-running = true;
-      };
-    };
-   wallpaper = {
-    enabled = true;
-   };
-   };
-   
-  }; 
 
 }
