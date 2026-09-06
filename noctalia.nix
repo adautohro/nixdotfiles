@@ -1,5 +1,8 @@
-{ config, pkgs, ... }:
+{ inputs, config, pkgs, ... }:
 {
+imports = [
+    inputs.noctalia.homeModules.default
+];
 programs.noctalia = {
 
   enable = true;
@@ -11,6 +14,11 @@ programs.noctalia = {
       source = "wallpaper";
       builtin = "m3-content";
       pure_black_dark = false;
+      
+      templates = {
+        builtin_ids = [ "Niri" ];
+	community_ids = [];
+      };
     };
 
     backdrop = {
@@ -52,6 +60,7 @@ programs.noctalia = {
 
     wallpaper = {
       enabled = true;
+      directory = "${xdg.userDirs.pictures}/wallpapers";
       transition_on_startup = true;
       automation.enabled = false;
     };
@@ -73,7 +82,8 @@ programs.noctalia = {
       };
     };
 
-  };
+  
+
   
   nightlight = {
     enabled = true;
@@ -81,7 +91,7 @@ programs.noctalia = {
   };
  
   location = {
-    address = "Fortaleza,Brazil";
+     address = "Fortaleza,Brazil";
   };
 
   lockscreen = {
@@ -92,8 +102,8 @@ programs.noctalia = {
 
   shell = {
     app_icon_colorize = false;
-    font_family = "Adwaita Sans";
-    lang = "pt-BR";
+    font_family = "JetBrainsMono Nerd Font";
+    lang = "pt-br";
     niri_overview_type_to_launch_enabled = true;
     screen_time_enabled = true;
     settings_window_translucent = false;
@@ -108,6 +118,8 @@ programs.noctalia = {
     };
 
   };
-}; 
+  };
+};
+ 
 
 }

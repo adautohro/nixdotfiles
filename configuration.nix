@@ -97,7 +97,7 @@
     packages = with pkgs; [
     #  thunderbird
     ];
-    shell = pkgs.zsh;
+    shell = pkgs.zsh; # User default shell
   };
 
   # Programs
@@ -114,7 +114,9 @@
     dedicatedServer.openFirewall = true;
     localNetworkGameTransfers.openFirewall = true;
   };
+
   programs.gamemode.enable = true;
+  programs.gamescope.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -124,7 +126,8 @@
   environment.systemPackages = with pkgs; [
      vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
      git
-  #  wget
+     wget
+     curl
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

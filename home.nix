@@ -6,28 +6,62 @@
 
   home.stateVersion = "26.05";
 
-  fonts.fontconfig.enable = true;
+  # targets.genericLinux.enable = true; # Non NixOS
+
+  fonts.fontconfig.enable = true; # Manage system fonts
 
   #Packages that should be installed in the user profile
   home.packages = with pkgs; [
+     bitwarden
+     heroic
      fastfetch
      nerd-fonts.jetbrains-mono
   ];
+
+  xdg = {
+   # Add the support to the default user directories on XDG system
+    enable = true;
+    userDirs = {
+      enable = true;
+      createDirectories = true;
+    };
+  };
+
+  home.file = {
+     "${xdg.userDirs.pictures}/wallpapers" = {
+       source = "./wallpapers";
+       recursive = true;
+     };
+  };
   
   #Let home-manager install and manage itself
   programs.home-manager.enable = true;
 
 
+  programs.git = {
+    enable = true;
+    userName = "Adauto H. R. de Oliveira";
+    userEmail = "112290445+adautohro@users.noreply.github.com";
+
+    aliases = {
+      st = "status";
+    };
+
+    extraConfig = {
+      init.defaultBranch = "main";
+    };
+  };
+
   programs.neovim.enable = true;
   programs.kitty = {
     enable = true;
     font = {
-      name = "JetbrainsMono Nerd Font";
+      name = "JetBrainsMono Nerd Font";
       size = 11;
     };
     settings = {
       background_opacity = "0.85";
-      background_blur = 32; # 1 to 64
+      background_blur = 1; # 1 to 64
     };
   };
 
@@ -83,11 +117,12 @@
   };
 
   imports = [ 
-    inputs.noctalia.homeModules.default
     inputs.zen-browser.homeModules.beta
     ./niri.nix 
     ./noctalia.nix
   ];
+
+
 
   programs.zen-browser = {
     enable = true; 
