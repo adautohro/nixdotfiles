@@ -16,8 +16,12 @@ programs.noctalia = {
       pure_black_dark = false;
       
       templates = {
-        builtin_ids = [ "Niri" ];
-	community_ids = [];
+        builtin_ids = [ "niri" "starship" "kitty" ];
+	community_ids = [ ];
+	niri-theme = {
+	  input_path = "~/.config/noctalia/templates/niri.kdl";
+	  output_path = "~/.config/niri/colors.kdl";
+	};
       };
     };
 
@@ -60,7 +64,7 @@ programs.noctalia = {
 
     wallpaper = {
       enabled = true;
-      directory = "${xdg.userDirs.pictures}/wallpapers";
+      directory = "${config.xdg.userDirs.pictures}/wallpapers";
       transition_on_startup = true;
       automation.enabled = false;
     };

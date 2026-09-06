@@ -4,6 +4,10 @@
 wayland.windowManager.niri = {
     enable = true;
 
+   # Add the noctalia theme
+   extraConfig = ''
+   '';
+
    settings = {
     screenshot-path = "~/Screenshots/%Y-%m-%d %H-%M-%S.png";
     spawn-at-startup = "noctalia";

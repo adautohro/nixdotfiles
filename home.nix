@@ -1,4 +1,4 @@
-{inputs, config, pkgs, ... }:
+{inputs, config, pkgs, lib, ... }:
 
 {
   home.username = "adautohro";
@@ -12,14 +12,14 @@
 
   #Packages that should be installed in the user profile
   home.packages = with pkgs; [
-     bitwarden
+     bitwarden-desktop
      heroic
      fastfetch
      nerd-fonts.jetbrains-mono
   ];
 
+  # Add the support to the default user directories on XDG system
   xdg = {
-   # Add the support to the default user directories on XDG system
     enable = true;
     userDirs = {
       enable = true;
@@ -28,8 +28,8 @@
   };
 
   home.file = {
-     "${xdg.userDirs.pictures}/wallpapers" = {
-       source = "./wallpapers";
+     "${config.xdg.userDirs.pictures}/wallpapers" = {
+       source = ./wallpapers;
        recursive = true;
      };
   };
@@ -40,25 +40,32 @@
 
   programs.git = {
     enable = true;
-    userName = "Adauto H. R. de Oliveira";
-    userEmail = "112290445+adautohro@users.noreply.github.com";
+    settings = {
+      user.name = "Adauto H. R. de Oliveira";
+      user.email = "112290445+adautohro@users.noreply.github.com";
 
-    aliases = {
-      st = "status";
-    };
+      alias = {
+        s = "status --short";
+	l = "log --graph --pretty --abbrev-commit";
+	cm = "commit --message";
+	aa = "add --all";
+      };
 
-    extraConfig = {
       init.defaultBranch = "main";
     };
   };
 
   programs.neovim.enable = true;
+
   programs.kitty = {
     enable = true;
     font = {
       name = "JetBrainsMono Nerd Font";
       size = 11;
     };
+    extraConfig = ''
+      include themes/noctalia.conf
+    '';
     settings = {
       background_opacity = "0.85";
       background_blur = 1; # 1 to 64
@@ -82,12 +89,6 @@
     '';
   };
 
-  programs.git = {
-   enable = true;
-   settings = {
-   };
-  };
- 
   programs.firefox = {
     enable = true;
     policies = {
