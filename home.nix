@@ -15,6 +15,9 @@
      bitwarden-desktop
      heroic
      fastfetch
+     mangohud
+     fd
+     ripgrep
      nerd-fonts.jetbrains-mono
   ];
 
@@ -87,6 +90,15 @@
     initContent = ''
 	fastfetch
     '';
+  };
+
+  programs.yazi = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  programs.zed-editor = {
+    enable = true;
   };
 
   programs.firefox = {

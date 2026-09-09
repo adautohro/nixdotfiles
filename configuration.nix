@@ -5,7 +5,7 @@
 
 {
   imports =
-    [ 
+    [
       ./hardware-configuration.nix
     ];
 
@@ -46,10 +46,11 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
-  # Enable the GNOME Desktop Environment.
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = true;
+  services.accounts-daemon.enable = true;
 
+  services.displayManager.regreet = {
+    enable = true;
+  };
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "br";
@@ -82,26 +83,24 @@
     #media-session.enable = true;
   };
 
-  # Battery 
+  # Battery
   services.power-profiles-daemon.enable = true;
   services.upower.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  services.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users."adautohro" = {
     isNormalUser = true;
     description = "Adauto Henrique Roseo de Oliveira";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-    #  thunderbird
-    ];
+    packages = with pkgs; [ ];
     shell = pkgs.zsh; # User default shell
   };
 
   # Programs
-  programs.niri = { 
+  programs.niri = {
    enable = true;
   };
   programs.firefox.enable = true;
@@ -124,11 +123,15 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+     vim
      git
      wget
      curl
+     xdg-utils
+     hicolor-icon-theme
   ];
+
+  services.xserver.desktopManager.runXdgAutostartIfNone = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -138,17 +141,33 @@
   #   enableSSHSupport = true;
   # };
 
+security.polkit = {
+  enable = true;
+  enablePkexecWrapper = true;
+  extraConfig = ''
+    polkit.addRule(function(action, subject) {
+      var allowedUsers = ["adautohro"];
 
+      if (action.id == "org.noctalia.greeter.sync-appearance" &&
+          action.lookup("program") == "${pkgs.noctalia-greeter}/bin/noctalia-greeter-apply-appearance" &&
+          action.lookup("user") == "root" &&
+          subject.local && subject.active &&
+          allowedUsers.indexOf(subject.user) >= 0) {
+        return polkit.Result.YES;
+      }
+    });
+  '';
+};
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+  # Enable support for flatpak
+  services.flatpak.enable = true;
 
    networking.firewall.enable = true;
    networking.firewall.allowedTCPPorts = [ 27015 27036 ];
    networking.firewall.allowedUDPPorts = [ 27015 27031 27036 3478 4379 4380 ];
 
-  # It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
+  # BEWARE Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "26.05";
 
