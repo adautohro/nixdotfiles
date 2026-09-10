@@ -110,6 +110,10 @@
     enable = true;
   };
 
+  programs.floorp = {
+    enable = true;
+  };
+
   programs.firefox = {
     enable = true;
     policies = {
@@ -140,7 +144,7 @@
 
 
   programs.zen-browser = {
-    enable = true;
+    enable = false;
     setAsDefaultBrowser = true;
 
     profiles.default = {
