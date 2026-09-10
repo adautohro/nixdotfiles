@@ -1,31 +1,30 @@
 # Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs,  ... }:
-
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-    ];
+  config,
+  pkgs,
+  ...
+}:
+{
+  imports = [
+    ./hardware-configuration.nix
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
-  networking.hostName = "nixos"; # Define your hostname.
-  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
+  # Networking and internet
   networking.networkmanager.enable = true;
+  networking.hostName = "nixos";
+  networking.wireless.enable = true;
+  networking.firewall.enable = true;
 
-  # Set your time zone.
   time.timeZone = "America/Fortaleza";
 
   # Select internationalisation properties.
@@ -43,6 +42,12 @@
     LC_TIME = "pt_BR.UTF-8";
   };
 
+  xdg.portal.enable = true;
+  xdg.portal.wlr.enable = true;
+  xdg.portal.extraPortals = [ "xdg-desktop-portal-gtk" ];
+
+  services.dbus.enable = true;
+
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
@@ -54,7 +59,7 @@
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "br";
-    variant = "";
+    variant = "abnt2";
   };
 
   # Configure console keymap
@@ -63,11 +68,16 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  # Hardware
   hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = false; # Enable Bluetooth on boot
+  hardware.graphics.enable = true; # Enable GPU acceleration
+  hardware.graphics.enable32Bit = true;
 
-  services.xserver.videoDrivers = ["amdgpu"];
+  # Graphics Driver
+  services.xserver.videoDrivers = [ "amdgpu" ];
 
-  # Enable sound with pipewire.
+  # Sound
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -75,34 +85,44 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
+    jack.enable = true;
   };
 
   # Battery
-  services.power-profiles-daemon.enable = true;
-  services.upower.enable = true;
+  services.tlp = {
+    enable = true; # Power manager for laptops
+    pd.enable = true; # power-profiles-daemon compatibility
+  };
+  services.upower.enable = true; # Dbus interface for power managers
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  services.libinput.enable = true;
+  services.libinput.enable = true; # Enable touchpad support
+
+  nix.settings.auto-optimise-store = true; # Remove unnecessary store file copies
+
+  # Auto clean old system snapshots
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
+  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users."adautohro" = {
     isNormalUser = true;
     description = "Adauto Henrique Roseo de Oliveira";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
     packages = with pkgs; [ ];
     shell = pkgs.zsh; # User default shell
   };
 
   # Programs
   programs.niri = {
-   enable = true;
+    enable = true;
   };
+  # programs.ladybird.enable = true;
   programs.firefox.enable = true;
   programs.zsh.enable = true;
 
@@ -120,55 +140,30 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # System packages
   environment.systemPackages = with pkgs; [
-     vim
-     git
-     wget
-     curl
-     xdg-utils
-     hicolor-icon-theme
+    vim
+    git
+    wget
+    curl
+    xdg-utils
+    playerctl # Media player buttons support
+    papirus-icon-theme
+    adwaita-icon-theme
+    hicolor-icon-theme
   ];
 
   services.xserver.desktopManager.runXdgAutostartIfNone = true;
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
+  # Graphics aceleration
 
-security.polkit = {
-  enable = true;
-  enablePkexecWrapper = true;
-  extraConfig = ''
-    polkit.addRule(function(action, subject) {
-      var allowedUsers = ["adautohro"];
-
-      if (action.id == "org.noctalia.greeter.sync-appearance" &&
-          action.lookup("program") == "${pkgs.noctalia-greeter}/bin/noctalia-greeter-apply-appearance" &&
-          action.lookup("user") == "root" &&
-          subject.local && subject.active &&
-          allowedUsers.indexOf(subject.user) >= 0) {
-        return polkit.Result.YES;
-      }
-    });
-  '';
-};
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+
   # Enable support for flatpak
   services.flatpak.enable = true;
-
-   networking.firewall.enable = true;
-   networking.firewall.allowedTCPPorts = [ 27015 27036 ];
-   networking.firewall.allowedUDPPorts = [ 27015 27031 27036 3478 4379 4380 ];
 
   # BEWARE Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "26.05";
-
 }
