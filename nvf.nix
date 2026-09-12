@@ -18,6 +18,9 @@
 
         options = {
           cursorlineopt = "both";
+          autoindent = true;
+          smartindent = true;
+          expandtab = true;
           shiftwidth = 4;
           tabstop = 4;
         };

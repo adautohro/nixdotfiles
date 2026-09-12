@@ -122,7 +122,9 @@
   programs.niri = {
     enable = true;
   };
+
   # programs.ladybird.enable = true;
+
   programs.firefox.enable = true;
   programs.zsh.enable = true;
 
@@ -147,6 +149,7 @@
     wget
     curl
     xdg-utils
+    zed-editor
     playerctl # Media player buttons support
     papirus-icon-theme
     adwaita-icon-theme

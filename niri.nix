@@ -42,7 +42,7 @@
 
         focus-ring = {
           width = 2;
-          active-color = "#7fc8ff";
+          active-color = "#FFFFFF";
           inactive-color = "#505050";
         };
       };

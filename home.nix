@@ -16,6 +16,7 @@
   home.username = "adautohro";
   home.homeDirectory = "/home/adautohro";
 
+  home.preferXdgDirectories = true;
   home.stateVersion = "26.05";
 
   # targets.genericLinux.enable = true; # Non NixOS
@@ -110,10 +111,6 @@
     enable = true;
   };
 
-  programs.floorp = {
-    enable = true;
-  };
-
   programs.firefox = {
     enable = true;
     policies = {
@@ -130,18 +127,49 @@
         ImproveSuggest = false;
         Locked = true;
       };
+
+      ExtensionSettings = {
+        "{3c078156-979c-498b-8990-85f7987dd929}" = {
+          # Sidebery
+          installation_mode = "force_installed";
+          install_url = "https://addons.mozilla.org/firefox/downloads/latest/sidebery/latest.xpi";
+        };
+        "uBlock0@raymondhill.net" = {
+          installation_mode = "force_installed";
+          install_url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
+          private-browsing = true;
+        };
+        "addon@darkreader.org" = {
+          installation_mode = "force_installed";
+          install_url = "https://addons.mozilla.org/firefox/downloads/latest/darkreader/latest.xpi";
+        };
+        "{446900e4-71c2-419f-a6a7-df9c091e268b}" = {
+          # Bitwarden
+          installation_mode = "force_installed";
+          install_url = "https://addons.mozilla.org/firefox/downloads/latest/bitwarden-password-manager/latest.xpi";
+        };
+      };
+
     };
-    profiles.default = {
-      id = 0;
-      name = "default";
+
+    profiles.adauto = {
+      id = 1;
+      name = "adauto";
       isDefault = true;
 
       settings = {
-
+        "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+        "browser.uidensity" = 0;
+        "svg.context-properties.content.enabled" = true;
+        "sidebar.visibility" = "always-show";
       };
-    };
-  };
 
+      userChrome = "@import ${inputs.flexbox}/chrome/userChrome.css";
+      userContent = "@import ${inputs.flexbox}/chrome/userContent.css";
+
+    };
+
+  };
 
   programs.zen-browser = {
     enable = false;
