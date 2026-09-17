@@ -26,11 +26,6 @@
       };
     };
 
-    flexbox = {
-      url = "https://github.com/yuuqilin/FlexFox/releases/download/v7.0.0/FlexFox-v7.0.0.zip";
-      flake = false;
-    };
-
     noctalia = {
       url = "github:noctalia-dev/noctalia/cachix";
     };

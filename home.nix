@@ -31,8 +31,19 @@
     mangohud
     fd
     ripgrep
+    cine
+    qimgv
+    decibels
+    mission-center
+    snapshot
+    opencpn
+    localsend
+    kdePackages.okular
+    bibata-cursors
+    gtk3
     nerd-fonts.jetbrains-mono
   ];
+
 
   # Add the support to the default user directories on XDG system
   xdg = {
@@ -43,11 +54,34 @@
     };
   };
 
+  gtk = {
+    enable = true;
+    iconTheme = {
+      name = "Papirus-Dark";
+      package = pkgs.papirus-icon-theme;
+    };
+  };
+
+  qt = {
+    enable = true;
+    platformTheme.name = "gtk3";
+  };
+
+  # Manage the wallpapers
   home.file = {
     "${config.xdg.userDirs.pictures}/wallpapers" = {
       source = ./wallpapers;
       recursive = true;
     };
+  };
+
+  home.pointerCursor = {
+    enable = true;
+    gtk.enable = true;
+    x11.enable = true;
+    name = "Bibata-Original-Ice";
+    package = pkgs.bibata-cursors;
+    size = 24;
   };
 
   #Let home-manager install and manage itself
@@ -102,6 +136,15 @@
     '';
   };
 
+  programs.calibre = {
+    enable = true;
+  };
+
+  programs.sioyek = {
+    enable = true;
+  };
+
+  programs.zoxide.enable = true;
   programs.yazi = {
     enable = true;
     enableZshIntegration = true;
@@ -112,7 +155,7 @@
   };
 
   programs.firefox = {
-    enable = true;
+    enable = false;
     policies = {
       DisableFirefoxScreenshots = true;
       DontCheckDefaultBrowser = true;
@@ -152,27 +195,22 @@
 
     };
 
-    profiles.adauto = {
-      id = 1;
-      name = "adauto";
-      isDefault = true;
-
+    profiles.default = {
+      id = 0;
+      name = "default";
+      path = "default";
       settings = {
         "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
         "browser.uidensity" = 0;
         "svg.context-properties.content.enabled" = true;
         "sidebar.visibility" = "always-show";
       };
-
-      userChrome = "@import ${inputs.flexbox}/chrome/userChrome.css";
-      userContent = "@import ${inputs.flexbox}/chrome/userContent.css";
-
     };
 
   };
 
   programs.zen-browser = {
-    enable = false;
+    enable = true;
     setAsDefaultBrowser = true;
 
     profiles.default = {

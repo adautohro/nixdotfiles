@@ -16,19 +16,6 @@
         "url": "https://git.lix.systems/lix-project/flake-compat.git"
       }
     },
-    "flexbox": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1788762645,
-        "narHash": "sha256-MEVf0wi3i5K5OKR8trCm+KHaQ81PfZx0/a40+2Hkg84=",
-        "type": "tarball",
-        "url": "https://github.com/yuuqilin/FlexFox/releases/download/v7.0.0/FlexFox-v7.0.0.zip"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://github.com/yuuqilin/FlexFox/releases/download/v7.0.0/FlexFox-v7.0.0.zip"
-      }
-    },
     "home-manager": {
       "inputs": {
         "nixpkgs": "nixpkgs"
@@ -161,7 +148,6 @@
     },
     "root": {
       "inputs": {
-        "flexbox": "flexbox",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs_2",
         "noctalia": "noctalia",

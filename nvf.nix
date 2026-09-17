@@ -20,9 +20,19 @@
           cursorlineopt = "both";
           autoindent = true;
           smartindent = true;
+          preserveindent = true;
+          smarttab = true;
           expandtab = true;
           shiftwidth = 4;
           tabstop = 4;
+          softtabstop = 4;
+        };
+
+        lazy.plugins = {
+          "tokyonight.nvim".package = pkgs.vimPlugins.tokyonight-nvim;
+          "gruvbox.nvim".package = pkgs.vimPlugins.gruvbox-nvim;
+          "onedark.nvim".package = pkgs.vimPlugins.onedark-nvim;
+          "neovim-ayu".package = pkgs.vimPlugins.neovim-ayu;
         };
 
         ui = {
@@ -42,6 +52,187 @@
         };
 
         keymaps = [
+          # tab navigation
+          {
+            mode = [ "n" ];
+            key = "<leader>tn";
+            action = "<C-w>T";
+            desc = "Open current file in tab";
+          }
+          {
+            mode = [ "n" ];
+            key = "<leader>tx";
+            action = ":tabclose<CR>";
+            desc = "Close tab";
+          }
+          {
+            mode = [ "n" ];
+            key = "<A-Right>";
+            action = "gt";
+            desc = "Move to tab right";
+          }
+          {
+            mode = [ "n" ];
+            key = "<A-Left>";
+            action = "gT";
+            desc = "Move to tab left";
+          }
+          {
+            mode = [ "n" ];
+            key = "<leader>ta";
+            action = ":tabonly<CR>";
+            desc = "Close all other tabs";
+          }
+
+          # Improve page navigation
+          {
+            mode = [ "n" ];
+            key = "<C-d>";
+            action = "<C-d>zz";
+            desc = "Half page down";
+          }
+          {
+            mode = [ "n" ];
+            key = "<C-u";
+            action = "<C-u>zz";
+            desc = "Half page up";
+          }
+
+          # Improve window navigation
+          {
+            mode = [ "n" ];
+            key = "<A-h>";
+            action = "<C-w>h";
+            desc = "Switch to left window";
+          }
+          {
+            mode = [ "n" ];
+            key = "<A-j>";
+            action = "<C-w>j";
+            desc = "Switch to down window";
+          }
+          {
+            mode = [ "n" ];
+            key = "<A-k>";
+            action = "<C-w>k";
+            desc = "Switch to up window";
+          }
+          {
+            mode = [ "n" ];
+            key = "<A-l>";
+            action = "<C-w>l";
+            desc = "Switch to right window";
+          }
+
+          # Split and resize window
+          {
+            mode = [ "n" ];
+            key = "<leader>S";
+            action = ":split<CR>";
+            desc = "Split horizontally";
+          }
+          {
+            mode = [ "n" ];
+            key = "<leader>s";
+            action = ":vsplit<CR>";
+            desc = "Split vertically";
+          }
+          {
+            mode = [ "n" ];
+            key = "<C-Up>";
+            action = ":resize +2 <CR>";
+            desc = "Increase window height";
+          }
+          {
+            mode = [ "n" ];
+            key = "<C-Down>";
+            action = ":resize -2<CR>";
+            desc = "Decrease window height";
+          }
+          {
+            mode = [ "n" ];
+            key = "<C-Left>";
+            action = ":vertical resize +2<CR>";
+            desc = "Increase window width";
+          }
+          {
+            mode = [ "n" ];
+            key = "<C-Right>";
+            action = ":vertical resize -2<CR>";
+            desc = "Decrease window width";
+          }
+
+          # Move lines down/up
+          {
+            mode = [ "n" ];
+            key = "<S-A-j>";
+            action = ":m .+1<CR>==";
+            desc = "Move line down";
+          }
+          {
+            mode = [ "n" ];
+            key = "<S-A-k>";
+            action = ":m .-2<CR>==";
+            desc = "Move line up";
+          }
+          {
+            mode = [ "v" ];
+            key = "<S-A-j>";
+            action = ":m '>+1<CR>gv=gv";
+            desc = "Move selection down";
+          }
+          {
+            mode = [ "v" ];
+            key = "<S-A-k>";
+            action = ":m '<-2<CR>gv=gv";
+            desc = "Move selection up";
+          }
+
+          {
+            mode = [ "v" ];
+            key = "<";
+            action = "<gv";
+            desc = "Indent selection right";
+          }
+          {
+            mode = [ "v" ];
+            key = ">";
+            action = ">gv";
+            desc = "Indent selection left";
+          }
+
+          # Terminal
+          {
+            mode = [ "t" ];
+            key = "<Esc>";
+            action = "<C-\\><C-n>";
+            desc = "Escape terminal mode";
+          }
+          {
+            mode = [ "t" ];
+            key = "<A-h>";
+            action = "<C-\\><C-n><C-w>h";
+            desc = "Escape terminal mode";
+          }
+          {
+            mode = [ "t" ];
+            key = "<A-l>";
+            action = "<C-\\><C-n><C-w>l";
+            desc = "Escape terminal mode";
+          }
+          {
+            mode = [ "t" ];
+            key = "<A-j>";
+            action = "<C-\\><C-n><C-w>j";
+            desc = "Escape terminal mode";
+          }
+          {
+            mode = [ "t" ];
+            key = "<A-k>";
+            action = "<C-\\><C-n><C-w>k";
+            desc = "Escape terminal mode";
+          }
+
           {
             key = "<leader>z";
             mode = [ "n" ];
@@ -163,7 +354,6 @@
         };
 
         binds = {
-          hardtime-nvim.enable = true;
           whichKey.enable = true;
         };
 

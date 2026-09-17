@@ -42,14 +42,32 @@
     LC_TIME = "pt_BR.UTF-8";
   };
 
-  xdg.portal.enable = true;
-  xdg.portal.wlr.enable = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  xdg = {
+    portal = {
+    xdgOpenUsePortal = true;
+      enable = true;
+      wlr.enable = true;
+      extraPortals = [
+        pkgs.xdg-desktop-portal-termfilechooser
+        pkgs.xdg-desktop-portal-gtk
+      ];
+    };
+  };
 
   services.dbus.enable = true;
+  services.gvfs.enable = true; # Mount, trash and other funcionalities
+  services.tumbler.enable = true; # Thumbnail support for images
+
+
+  services.geoclue2.enable = true; # Wireless GPS support
+  services.gpsd.enable = true; # Dedicated GPS support
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
+
+  # Enable the key bank for system apps
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.login.enableGnomeKeyring = true;
 
   services.accounts-daemon.enable = true;
 
@@ -73,9 +91,9 @@
   hardware.bluetooth.powerOnBoot = false; # Enable Bluetooth on boot
   hardware.graphics.enable = true; # Enable GPU acceleration
   hardware.graphics.enable32Bit = true;
-
-  # Graphics Driver
-  services.xserver.videoDrivers = [ "amdgpu" ];
+  hardware.amdgpu.overdrive.enable = true; # Enable overclock support
+  hardware.amdgpu.opencl.enable = true; # Enable OpenCL support
+  hardware.amdgpu.zluda.enable = true; # Enable CUDA support
 
   # Sound
   services.pulseaudio.enable = false;
@@ -113,6 +131,8 @@
     extraGroups = [
       "networkmanager"
       "wheel"
+      "video"
+      "audio"
     ];
     packages = with pkgs; [ ];
     shell = pkgs.zsh; # User default shell
@@ -125,8 +145,11 @@
 
   # programs.ladybird.enable = true;
 
-  programs.firefox.enable = true;
+  programs.firefox.enable = false;
   programs.zsh.enable = true;
+  programs.nix-ld = {
+    enable = true;
+  };
 
   programs.steam = {
     enable = true;
@@ -148,12 +171,7 @@
     git
     wget
     curl
-    xdg-utils
-    zed-editor
     playerctl # Media player buttons support
-    papirus-icon-theme
-    adwaita-icon-theme
-    hicolor-icon-theme
   ];
 
   services.xserver.desktopManager.runXdgAutostartIfNone = true;
@@ -165,6 +183,8 @@
 
   # Enable support for flatpak
   services.flatpak.enable = true;
+
+  security.polkit.enable = true;
 
   # BEWARE Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
