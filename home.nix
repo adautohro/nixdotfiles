@@ -1,6 +1,7 @@
 {
   inputs,
   config,
+  lib,
   pkgs,
   ...
 }:
@@ -8,6 +9,7 @@
 {
   imports = [
     inputs.zen-browser.homeModules.beta
+    inputs.nix-flatpak.homeManagerModules.nix-flatpak
     ./niri.nix
     ./nvf.nix
     ./noctalia.nix
@@ -33,14 +35,18 @@
     ripgrep
     cine
     qimgv
-    decibels
     mission-center
     snapshot
     opencpn
     localsend
     kdePackages.okular
     bibata-cursors
-    gtk3
+    xdg-desktop-portal-termfilechooser
+    ouch
+    thunderbird
+    zapzap
+    jellyfin
+    feishin
     nerd-fonts.jetbrains-mono
   ];
 
@@ -48,11 +54,26 @@
   # Add the support to the default user directories on XDG system
   xdg = {
     enable = true;
+    portal = {
+      enable = true;
+      extraPortals =
+      lib.mkForce [pkgs.xdg-desktop-portal-termfilechooser];
+
+      config.common = lib.mkForce {
+        "org.freedesktop.impl.portal.FileChooser" = "termfilechooser";
+      };
+    };
+
     userDirs = {
       enable = true;
       createDirectories = true;
     };
   };
+
+  xdg.configFile."xdg-desktop-portal-termfilechooser/config".text = ''
+    [cmd]
+    cmd=kitty --class yazi-chooser -e yazi %f --choser-file=%o
+  '';
 
   gtk = {
     enable = true;
@@ -119,6 +140,21 @@
     };
   };
 
+  programs.obsidian = {
+    enable = true;
+    cli.enable = true;
+    defaultSettings = {
+      hotkeys = {
+       "templates:insert-template" = {
+         modifiers = [ "Mod" ];
+         key = "T";
+       };
+
+       "new-tab" = { };
+      };
+    };
+  };
+
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
@@ -148,10 +184,73 @@
   programs.yazi = {
     enable = true;
     enableZshIntegration = true;
+    plugins = {
+      mount = pkgs.yaziPlugins.mount;
+    };
+
+    keymap = {
+      manager.prepend_keymap = [
+        {
+          on = [ "M" ];
+          run = "plugin mount";
+          desc = "Open mount menu";
+        }
+      ];
+    };
   };
 
   programs.zed-editor = {
     enable = true;
+    defaultEditor = true;
+
+    userSettings = {
+      vim-mode = true;
+      vim = {
+        user-smartcase-find = true;
+        toggle-relative-numbers = true;
+      } ;
+
+      buffer-font-family = "JetBrainsMono Nerd Font Mono";
+      use-smartcase-search = true;
+      remove-trailing-whitespace-on-save = true;
+      ensure-final-newline-on-save = true;
+      format-on-save = true;
+
+      completion-menu-item-kind = "symbol";
+
+      which-key.enabled = true;
+    };
+
+    userKeymaps = [
+      {
+        context = "vim_operator == a || vim_operator == i || vim_operator == cs";
+        bindings = {
+          "q" = "vim::MiniQuotes";
+          "b" = "vim::MiniBrackets";
+        };
+      }
+    ];
+
+    extensions = [
+      # Misc
+      "color-highlight"
+      "comment"
+      "git-firefly"
+
+      # Languages
+      "html"
+      "nix"
+
+      # Themes
+      "catppuccin"
+      "one-dark-pro-enhanced"
+      "dracula"
+    ];
+  };
+
+  programs.devenv = {
+    enable = true;
+    enableZshIntegration = true;
   };
 
   programs.firefox = {
@@ -209,6 +308,10 @@
 
   };
 
+  services.flatpak.packages = [
+    "com.actualbudget.actual"
+  ];
+
   programs.zen-browser = {
     enable = true;
     setAsDefaultBrowser = true;
@@ -237,28 +340,6 @@
         "c01d3e22-1cee-45c1-a25e-53c0f180eea8" # Ghost Tabs
         "a6335949-4465-4b71-926c-4a52d34bc9c0" # Better Find Bar
       ];
-
-      pinsForce = true;
-      pinsForceAction = "demote";
-      pins = {
-        "Spotify" = {
-          id = "spotify-essential";
-          url = "https://open.spotify.com/";
-          isEssential = true;
-        };
-
-        "Github" = {
-          id = "github-essential";
-          url = "https://github.com/";
-          isEssential = true;
-        };
-
-        "Whatsapp" = {
-          id = "whatsapp-essential";
-          url = "https://whatsapp.com";
-          isEssential = true;
-        };
-      };
     };
 
     policies = {

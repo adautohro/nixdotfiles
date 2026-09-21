@@ -8,6 +8,9 @@
     enable = true;
 
     settings = {
+      environment = {
+        "QT_QPA_PLATFORMTHEME" = "xdgdesktopportal";
+      };
       screenshot-path = "~/Screenshots/%Y-%m-%d %H-%M-%S.png";
       spawn-at-startup = "noctalia";
       prefer-no-csd = { };
@@ -67,7 +70,21 @@
         {
           window-rule._children = [
             { geometry-corner-radius = 12; }
+            { draw-border-with-background = false; }
             { clip-to-geometry = true; }
+          ];
+        }
+        {
+          window-rule._children = [
+            {
+              match._props = {
+                title = "^termfilechooser";
+              };
+              match._props = {
+                app-id = "^termfilechooser";
+              };
+            }
+            { open-floating = true; }
           ];
         }
       ];

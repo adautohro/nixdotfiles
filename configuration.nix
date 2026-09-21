@@ -22,7 +22,6 @@
   # Networking and internet
   networking.networkmanager.enable = true;
   networking.hostName = "nixos";
-  networking.wireless.enable = true;
   networking.firewall.enable = true;
 
   time.timeZone = "America/Fortaleza";
@@ -48,15 +47,19 @@
       enable = true;
       wlr.enable = true;
       extraPortals = [
-        pkgs.xdg-desktop-portal-termfilechooser
         pkgs.xdg-desktop-portal-gtk
       ];
     };
   };
 
+  environment.sessionVariables = {
+    QT_QPA_PLATFORMTHEME = "xdgdesktopportal"; # Make Qt support File Choosers
+  };
+
   services.dbus.enable = true;
   services.gvfs.enable = true; # Mount, trash and other funcionalities
   services.tumbler.enable = true; # Thumbnail support for images
+  services.udisks2.enable = true; # External drive mounting support
 
 
   services.geoclue2.enable = true; # Wireless GPS support
@@ -87,6 +90,8 @@
   services.printing.enable = true;
 
   # Hardware
+  hardware.enableAllFirmware = true; # Allow unfree firmware
+  hardware.enableRedistributableFirmware = true; # Firmware updates support
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = false; # Enable Bluetooth on boot
   hardware.graphics.enable = true; # Enable GPU acceleration
@@ -121,7 +126,7 @@
   nix.gc = {
     automatic = true;
     dates = "weekly";
-    options = "--delete-older-than 7d";
+    options = "--delete-older-than 7d +2";
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -149,6 +154,11 @@
   programs.zsh.enable = true;
   programs.nix-ld = {
     enable = true;
+    libraries = with pkgs; [
+      gtk2
+      gtk3
+      gsettings-desktop-schemas
+    ];
   };
 
   programs.steam = {
@@ -172,11 +182,11 @@
     wget
     curl
     playerctl # Media player buttons support
+    unrar
+    unzip
   ];
 
   services.xserver.desktopManager.runXdgAutostartIfNone = true;
-
-  # Graphics aceleration
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;

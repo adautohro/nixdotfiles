@@ -10,10 +10,13 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixos-hardware.url = "github:NixOS/nixos-hardware";
 
     home-manager = {
       url = "github:nix-community/home-manager";
     };
+
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
 
     nvf.url = "github:notashelf/nvf";
 
@@ -32,13 +35,14 @@
   };
 
   outputs =
-    inputs@{ nixpkgs, home-manager, ... }:
+    inputs@{ nixpkgs, nixos-hardware, home-manager, ... }:
     {
       nixosConfigurations = {
         nixos = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs; }; # Pass the inputs dependencies to all modules below
           modules = [
             ./configuration.nix
+            nixos-hardware.nixosModules.lenovo-ideapad-15alc6
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
