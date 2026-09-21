@@ -42,22 +42,21 @@
     kdePackages.okular
     bibata-cursors
     xdg-desktop-portal-termfilechooser
-    ouch
+    ouch # Fast compression and de compression
     thunderbird
     zapzap
-    jellyfin
+    jellyfin # Server
+    jellyfin-desktop
     feishin
     nerd-fonts.jetbrains-mono
   ];
-
 
   # Add the support to the default user directories on XDG system
   xdg = {
     enable = true;
     portal = {
       enable = true;
-      extraPortals =
-      lib.mkForce [pkgs.xdg-desktop-portal-termfilechooser];
+      extraPortals = lib.mkForce [ pkgs.xdg-desktop-portal-termfilechooser ];
 
       config.common = lib.mkForce {
         "org.freedesktop.impl.portal.FileChooser" = "termfilechooser";
@@ -145,12 +144,12 @@
     cli.enable = true;
     defaultSettings = {
       hotkeys = {
-       "templates:insert-template" = {
-         modifiers = [ "Mod" ];
-         key = "T";
-       };
+        "templates:insert-template" = {
+          modifiers = [ "Mod" ];
+          key = "T";
+        };
 
-       "new-tab" = { };
+        "new-tab" = { };
       };
     };
   };
@@ -204,21 +203,30 @@
     defaultEditor = true;
 
     userSettings = {
-      vim-mode = true;
+      vim_mode = true;
       vim = {
-        user-smartcase-find = true;
-        toggle-relative-numbers = true;
-      } ;
+        user_smartcase_find = true;
+        toggle_relative_numbers = true;
+      };
 
-      buffer-font-family = "JetBrainsMono Nerd Font Mono";
-      use-smartcase-search = true;
-      remove-trailing-whitespace-on-save = true;
-      ensure-final-newline-on-save = true;
-      format-on-save = true;
+      buffer_font_family = "JetBrainsMono Nerd Font Mono";
+      use_smartcase_search = true;
+      remove_trailing_whitespace_on_save = true;
+      ensure_final_newline_on_save = true;
+      format_on_save = "on";
 
-      completion-menu-item-kind = "symbol";
+      completion_menu_item_kind = "symbol";
 
-      which-key.enabled = true;
+      which_key.enabled = true;
+
+      languages = {
+        Nix = {
+          language_servers = [
+            "nixd"
+            "!nil"
+          ];
+        };
+      };
     };
 
     userKeymaps = [

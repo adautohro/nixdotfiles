@@ -35,7 +35,12 @@
   };
 
   outputs =
-    inputs@{ nixpkgs, nixos-hardware, home-manager, ... }:
+    inputs@{
+      nixpkgs,
+      nixos-hardware,
+      home-manager,
+      ...
+    }:
     {
       nixosConfigurations = {
         nixos = nixpkgs.lib.nixosSystem {

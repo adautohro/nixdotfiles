@@ -43,7 +43,7 @@
 
   xdg = {
     portal = {
-    xdgOpenUsePortal = true;
+      xdgOpenUsePortal = true;
       enable = true;
       wlr.enable = true;
       extraPortals = [
@@ -60,7 +60,6 @@
   services.gvfs.enable = true; # Mount, trash and other funcionalities
   services.tumbler.enable = true; # Thumbnail support for images
   services.udisks2.enable = true; # External drive mounting support
-
 
   services.geoclue2.enable = true; # Wireless GPS support
   services.gpsd.enable = true; # Dedicated GPS support
